@@ -18,3 +18,11 @@ sudo systemctl enable docker
 ``` sudo docker pull qdrant/qdrant ```
 
 ``` sudo docker run -d --name qdrant -p 6333:6333 qdrant/qdrant ```
+
+### Start/Attach/Stop
+
+``` sudo docker start qdrant ```
+
+``` sudo docker attach qdrant ```
+
+``` sudo docker stop qdrant ```
