@@ -3,12 +3,18 @@
 ```
 docker pull qdrant/qdrant
 
+#default
 sudo docker run -d --name qdrant -p 6333:6333 qdrant/qdrant
 
+#with db location mapping
 docker run -p 6333:6333 -p 6334:6334 \
     -v $(pwd)/qdrant_storage:/qdrant/storage:z \
     qdrant/qdrant
 
+#starting existing
+docker start qdrant
+
+#removing existing
 docker rm -f qdrant
 ```
 
