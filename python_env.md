@@ -24,6 +24,13 @@ myenv\Scripts\activate
 
 Once activated, the virtual environment's name will appear in your terminal prompt.
 
+## Add custom ssl certificates
+-----------------------------------
+```bash
+pip install certifi
+python -c "import certifi; print(certifi.where())"
+openssl x509 -in $specific_ca.crt -text >> $virtualenv/lib/python2.7/site-packages/certifi/cacert.pem
+```
 ## 3. Deactivating the Virtual Environment
 To deactivate the virtual environment, simply run:
 
