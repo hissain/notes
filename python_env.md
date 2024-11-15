@@ -97,3 +97,12 @@ deactivate
 ```
 rm -rf myenv
 ```
+
+
+## Notebook Kernel Creation
+
+```
+pip install ipykernel
+python -m ipykernel install --user --name LLamaFineTuningKernel
+
+```
