@@ -1,21 +1,21 @@
 # Cheatsheets for ML Engineer
 
 ## Table of Contents
-- [Section 1: Python](#section-1-python)
-  - [1.1 Installation](#section-1-python-installation)
-- [Section 2: Virtual Environment](#section-2-venv)
+- [Section 1: Python](#1)
+  - [1.1 Installation](#1_1)
+- [Section 2: Virtual Environment](#2)
   - [2.1 Installation](#installation)
-- [Section 3: PIP Usage](#section-3-pip)
-- [Section 4: Docker Usage](#section-4-docker)
-- [Section 5: Ollama on Open-WebUI](#section-5-openwebui)
-- [Section 6: Qdrant Database](#section-6-qdrant)
-- [Section 7: Jupyter Notebook on Remote](#section-7-jupyter)
-- - [Section 7.1: Automation by scripts](#section-7-jupyter-script)
-- - [Section 7.2: Avoid Jupyter Notebook Token](#section-7-jupyter-token)
-- [Section 8: Huggingface](#section-8-huggingface)
+- [Section 3: PIP Usage](#3)
+- [Section 4: Docker Usage](#4)
+- [Section 5: Ollama on Open-WebUI](#5)
+- [Section 6: Qdrant Database](#6)
+- [Section 7: Jupyter Notebook on Remote](#7)
+- - [Section 7.1: Automation by scripts](#7_1)
+- - [Section 7.2: Avoid Jupyter Notebook Token](#7_2)
+- [Section 8: Huggingface](#8)
   
 ## Section 1: Python Installation
-<a id="section-1-python"></a>
+<a id="1"></a>
 As an example, install Python 3.11 on Ubuntu from the command line, follow these steps:
 
 ### Update the system packages:
@@ -31,7 +31,7 @@ sudo apt update
 ```
 
 ### Install Python:
-<a id="section-1-python-installation"></a>
+<a id="1_1"></a>
 
 ```bash
 sudo apt install python3.11
@@ -55,7 +55,7 @@ sudo update-alternatives --config python3
 ```
 
 ## Section 2: Virtual Environment
-<a id="section-2-venv"></a>
+<a id="2"></a>
 
 ### Creating a Virtual Environment with a Specific Python Version
 
@@ -99,7 +99,7 @@ rm -rf myenv
 ```
 
 ## Section 3: PIP Usage
-<a id="section-3-pip"></a>
+<a id="3"></a>
 Once the virtual environment is active, install packages using pip:
 
 ```
@@ -116,7 +116,6 @@ pip install git+https://github.com/username/repo.git
 ```
 
 For a specific branch/ commit:
-
 ```
 pip install git+https://github.com/username/repo.git@branch_name
 pip install git+https://github.com/username/repo.git@commit_hash
@@ -147,7 +146,7 @@ pip install -r requirements.txt
 ```
 
 ## Section 4: Docker Usage
-<a id="section-4-docker"></a>
+<a id="4"></a>
 
 ### Installation Docker-Desktop
 
@@ -179,7 +178,7 @@ sudo systemctl enable docker
 ``` sudo docker stop qdrant ```
 
 ## Section 5: Ollama on Open-WebUI
-<a id="section-5-openwebui"></a>
+<a id="5"></a>
 
 ### Download info
 
@@ -222,7 +221,7 @@ OLLAMA_HOST=127.0.0.1:11434 ollama serve
 ```
 
 ## Section 6:Qdrant Vector DB
-<a id="section-6-qdrant"></a>
+<a id="6"></a>
 
 ### Qdrant Setup:
 **Qdrant site:** https://qdrant.tech/documentation/quick-start/
@@ -291,7 +290,7 @@ print(search_result)
 ```
 
 ## Section 7: Jupyter Notebook on Remote Machine
-<a id="section-7-jupyter"> </a>
+<a id="7"> </a>
 
 ### Bining ports with remote server
 ```
@@ -306,7 +305,7 @@ sudo ufw allow 8181
 ```
 
 ### Section 7.1: Automation by scripts
-<a id="section-7-jupyter-sripts"> </a>
+<a id="7_1"> </a>
 
 **Script for the Remote Server (`remote_setup.sh`)**
 ```
@@ -389,8 +388,8 @@ chmod +x remote_setup.sh remote_connect.sh
 ```
 ./remote_connect.sh
 ```
-## Section 7: Avoid Jupyter Notebook Token
-<a id="section-7-jupyter-token"> </a>
+## Section 7.2: Avoid Jupyter Notebook Token
+<a id="7_2"> </a>
 
 ### Method: Disabling Token and Password Access (Secured via SSH)
 Edit Jupyter Configuration on the Remote Server, if you don’t already have a Jupyter configuration file, create one:
@@ -427,7 +426,7 @@ http://localhost:8888
 ```
 
 ## Section 8: Hugginface
-<a id="section-8-huggingface"> </a>
+<a id="8"> </a>
 
 ### Configure CLI & Download a model
 ```
