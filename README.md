@@ -9,7 +9,9 @@
 - [Section 4: Docker Usage](#section-4-docker)
 - [Section 5: Ollama on Open-WebUI](#section-5-openwebui)
 - [Section 6: Qdrant Database](#section-6-qdrant)
-
+- [Section 7: Jupyter Notebook on Remote](#section-7-jupyter)
+- [Section 8: Huggingface](#section-8-huggingface)
+  
 ## Section 1: Python Installation
 <a id="section-1-python"></a>
 As an example, install Python 3.11 on Ubuntu from the command line, follow these steps:
@@ -284,4 +286,36 @@ search_result = client.query_points(
 ).points
 
 print(search_result)
+```
+
+## Section 7: Jupyter Notebook on Remote
+<a id="section-7-jupyter"> </a>
+
+### Bining ports with remote server
+```
+jupyter notebook --no-browser --port=8080 # in remote server
+ssh -L 8080:localhost:8080 user@remote_host # local_port:remote_host:remote_port # in local client
+```
+
+### Allow port in Firewall in remote server
+```
+sudo ufw status
+sudo ufw allow 8181
+```
+
+## Section 8: Hugginface
+<a id="section-8-huggingface"> </a>
+
+### Configure CLI & Download a model
+```
+pip install -U "huggingface_hub[cli]"  
+  
+huggingface-cli login # use your HF token  
+   
+# Download the HuggingFace model to local folder "./Meta-Llama-3.1-8B-Instruct"  
+huggingface-cli download meta-llama/Meta-Llama-3.1-8B-Instruct --local-dir ./Meta-Llama-3.1-8B-Instruct
+```
+### Installing latest package
+```
+pip install git+https://github.com/huggingface/transformers
 ```
