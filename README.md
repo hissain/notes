@@ -8,7 +8,6 @@
   - [2.1 Installation](#installation)
 - [Section 3: PIP Usage](#section-3-pip)
 
-
 ## Section 1: Python Installation
 <a id="section-1-python"></a>
 As an example, install Python 3.11 on Ubuntu from the command line, follow these steps:
@@ -48,23 +47,17 @@ sudo update-alternatives --config python
 sudo update-alternatives --config python3
 ```
 
-## Virtual Environment
+## 2. Virtual Environment
 <a id="section-2-venv"></a>
 
-### 1. Creating a Virtual Environment with a Specific Python Version
+### Creating a Virtual Environment with a Specific Python Version
 
 To create a virtual environment with a specific version of Python, use the following command:
-
-```
-python3.x -m venv myenv
-```
-
 ```
 python3.10 -m venv myenv
 ```
 
-### 2. Activating the Virtual Environment
-On Linux/macOS:
+### Activating the Virtual Environment
 
 ```bash
 source myenv/bin/activate
@@ -88,7 +81,7 @@ Sometimes when pip installation yields SSLError you need to use `--trusted-host`
 python -m pip install --trusted-host github.com
 ```
 
-## 8. Deleting a Virtual Environment
+## Deactivating/Deleting a Virtual Environment
 To remove a virtual environment, deactivate it and delete the directory:
 
 ```bash
@@ -96,13 +89,6 @@ deactivate
 ```
 ```
 rm -rf myenv
-```
-
-### 3. Deactivating the Virtual Environment
-To deactivate the virtual environment, simply run:
-
-```bash
-deactivate
 ```
 
 ## 3. PIP Usage
@@ -114,33 +100,41 @@ pip install package_name
 ```
 Example:
 ```
-pip install numpy
+pip install transformers
 ```
 
-### 5. Freezing Installed Packages
-To generate a list of all installed packages and their versions in your virtual environment:
-
+### Install from a Git Repository
 ```bash
+pip install git+https://github.com/username/repo.git
+```
+
+For a specific branch/ commit:
+
+```
+pip install git+https://github.com/username/repo.git@branch_name
+pip install git+https://github.com/username/repo.git@commit_hash
+```
+
+### Install with a trustes host/certificate
+```
+pip install package_name --cert path_to_cert.pem
+pip install package_name --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org
+pip install package_name --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org
+```
+
+### Install with specific python version
+```
+python3.x -m pip install package_name
+```
+
+### Install without dependencies
+```
+pip install package_name --no-deps
+```
+
+### Freezing and Installing from requirements
+```bash
+pip list
 pip freeze > requirements.txt
-```
-
-### 6. Installing Packages from requirements.txt
-To install all the dependencies listed in a requirements.txt file, run:
-
-```bash
 pip install -r requirements.txt
-```
-
-This will create or update the requirements.txt file with the package list.
-
-### 7. Uninstalling Packages
-To uninstall a package, use:
-
-```bash
-pip uninstall package_name
-```
-Example:
-
-```
-pip uninstall numpy
 ```
