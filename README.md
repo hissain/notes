@@ -10,6 +10,8 @@
 - [Section 5: Ollama on Open-WebUI](#section-5-openwebui)
 - [Section 6: Qdrant Database](#section-6-qdrant)
 - [Section 7: Jupyter Notebook on Remote](#section-7-jupyter)
+- - [Section 7.1: Automation by scripts](#section-7-jupyter-script)
+- - [Section 7.2: Avoid Jupyter Notebook Token](#section-7-jupyter-token)
 - [Section 8: Huggingface](#section-8-huggingface)
   
 ## Section 1: Python Installation
@@ -288,7 +290,7 @@ search_result = client.query_points(
 print(search_result)
 ```
 
-## Section 7: Jupyter Notebook on Remote
+## Section 7: Jupyter Notebook on Remote Machine
 <a id="section-7-jupyter"> </a>
 
 ### Bining ports with remote server
@@ -301,6 +303,127 @@ ssh -L 8080:localhost:8080 user@remote_host # local_port:remote_host:remote_port
 ```
 sudo ufw status
 sudo ufw allow 8181
+```
+
+### Section 7.1: Automation by scripts
+<a id="section-7-jupyter-sripts"> </a>
+
+**Script for the Remote Server (`remote_setup.sh`)**
+```
+#!/bin/bash
+
+# Check and start Jupyter Notebook
+if ! pgrep -f "jupyter-notebook" > /dev/null; then
+    echo "Starting Jupyter Notebook..."
+    nohup jupyter-notebook --no-browser --ip=0.0.0.0 --port=8888 > jupyter.log 2>&1 &
+else
+    echo "Jupyter Notebook is already running."
+fi
+
+# Check and start Ollama server
+if ! pgrep -f "ollama" > /dev/null; then
+    echo "Starting Ollama server..."
+    nohup ollama serve > ollama.log 2>&1 &
+else
+    echo "Ollama server is already running."
+fi
+
+# Check and start Qdrant server
+if ! pgrep -f "qdrant" > /dev/null; then
+    echo "Starting Qdrant server..."
+    nohup qdrant > qdrant.log 2>&1 &
+else
+    echo "Qdrant server is already running."
+fi
+
+# Check and start Open-WebUI from a virtual environment
+VENV_PATH="$HOME/venv/openwebui"  # Change this path if needed
+if ! pgrep -f "webui.py" > /dev/null; then
+    echo "Starting Open-WebUI..."
+    source "$VENV_PATH/bin/activate"
+    nohup python "$VENV_PATH/openwebui/webui.py" > webui.log 2>&1 &
+    deactivate
+else
+    echo "Open-WebUI is already running."
+fi
+
+echo "All checks and startups completed."
+
+```
+
+**Script for Local Machine (remote_connect.sh)**
+```
+#!/bin/bash
+
+# Remote server credentials
+REMOTE_USER="your_username"
+REMOTE_HOST="remote.server.ip"
+REMOTE_PORT=22  # Default SSH port
+JUPYTER_REMOTE_PORT=8888  # Adjust if your Jupyter runs on a different port
+JUPYTER_LOCAL_PORT=8888  # Port to map locally
+
+# Run the setup script on the remote server
+ssh -p $REMOTE_PORT $REMOTE_USER@$REMOTE_HOST "bash -s" < remote_setup.sh
+
+# Forward Jupyter Notebook port to the local machine
+echo "Forwarding port $JUPYTER_REMOTE_PORT on remote to $JUPYTER_LOCAL_PORT locally..."
+ssh -N -f -L $JUPYTER_LOCAL_PORT:localhost:$JUPYTER_REMOTE_PORT $REMOTE_USER@$REMOTE_HOST
+
+echo "Jupyter Notebook is accessible at http://localhost:$JUPYTER_LOCAL_PORT"
+
+```
+
+#### Deployment Steps
+
+1. Save the remote_setup.sh script on your local machine, then upload it to the remote server:
+```
+scp remote_setup.sh your_username@remote.server.ip:~
+```
+
+2. Run the following commands locally and on the remote server:
+```
+chmod +x remote_setup.sh remote_connect.sh
+```
+
+3. On your local machine, execute:
+```
+./remote_connect.sh
+```
+## Section 7: Avoid Jupyter Notebook Token
+<a id="section-7-jupyter-token"> </a>
+
+### Method: Disabling Token and Password Access (Secured via SSH)
+Edit Jupyter Configuration on the Remote Server, if you don’t already have a Jupyter configuration file, create one:
+```
+jupyter notebook --generate-config
+```
+
+Then edit the configuration file located at ~/.jupyter/jupyter_notebook_config.py:
+```
+vi ~/.jupyter/jupyter_notebook_config.py
+```
+
+Add or modify the following lines:
+```
+c.NotebookApp.token = ''          # Disable token authentication
+c.NotebookApp.password = ''       # Disable password authentication
+c.NotebookApp.open_browser = False # Prevent the server from opening a browser
+c.NotebookApp.ip = '0.0.0.0'       # Listen on all network interfaces
+```
+
+Run the notebook server as you normally would:
+```
+jupyter-notebook --no-browser --port=8888
+```
+
+SSH Tunnel from Local Machine, forward the remote Jupyter port to your local machine securely:
+```
+ssh -N -f -L 8888:localhost:8888 your_username@remote.server.ip
+```
+
+Open your browser and navigate to:
+```
+http://localhost:8888
 ```
 
 ## Section 8: Hugginface
