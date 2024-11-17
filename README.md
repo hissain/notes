@@ -7,6 +7,8 @@
 - [Section 2: Virtual Environment](#section-2-venv)
   - [2.1 Installation](#installation)
 - [Section 3: PIP Usage](#section-3-pip)
+- [Section 4: Docker Usage](#section-4-docker)
+- [Section 5: Ollama on Open-WebUI](#section-4-openwebui)
 
 ## Section 1: Python Installation
 <a id="section-1-python"></a>
@@ -47,7 +49,7 @@ sudo update-alternatives --config python
 sudo update-alternatives --config python3
 ```
 
-## 2. Section 2: Virtual Environment
+## Section 2: Virtual Environment
 <a id="section-2-venv"></a>
 
 ### Creating a Virtual Environment with a Specific Python Version
@@ -138,3 +140,80 @@ pip list
 pip freeze > requirements.txt
 pip install -r requirements.txt
 ```
+
+## Section 4: Docker Usage
+<a id="section-4-docker"></a>
+
+### Installation Docker-Desktop
+
+``` sudo apt-get update ```
+
+Download docker-desktop and install with, 
+
+``` sudo apt-get install ./docker-desktop-amd64.deb ```
+
+### Installation of Docker
+``` sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+
+### Working with Docker/ Docker-Desktop
+
+``` sudo docker pull qdrant/qdrant ```
+
+``` sudo docker run -d --name qdrant -p 6333:6333 qdrant/qdrant ```
+
+### Start/Attach/Stop
+
+``` sudo docker start qdrant ```
+
+``` sudo docker attach qdrant ```
+
+``` sudo docker stop qdrant ```
+
+## Section 5: Ollama on Open-WebUI
+<a id="section-5-openwebui"></a>
+
+### Download info
+
+1. Install ollama: https://github.com/ollama/ollama/blob/main/docs/linux.md
+2. Install open-webUI: https://docs.openwebui.com/getting-started/
+
+### Open-WebUI
+Step 1: Pull the Open WebUI Image
+```
+docker pull ghcr.io/open-webui/open-webui:main
+```
+Step 2: Run the Container
+Run the container with default settings. This command includes a volume mapping to ensure persistent data storage.
+```
+docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
+```
+Optional, with GPU
+```
+docker run -d -p 3000:8080 --gpus all -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:cuda
+```
+
+Start open-webui in localhost (accessible from LAN)
+
+```open-webui serve```
+
+### Ollama Installation
+
+To install Ollama, run the following command:
+```
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+Start ollama server
+```
+ollama serve
+```
+
+Start ollama server in local PC (accessible from LAN)
+```
+OLLAMA_HOST=127.0.0.1:11434 ollama serve
+```
+
