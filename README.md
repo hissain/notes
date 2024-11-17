@@ -47,7 +47,7 @@ sudo update-alternatives --config python
 sudo update-alternatives --config python3
 ```
 
-## 2. Virtual Environment
+## 2. Section 2: Virtual Environment
 <a id="section-2-venv"></a>
 
 ### Creating a Virtual Environment with a Specific Python Version
@@ -91,7 +91,7 @@ deactivate
 rm -rf myenv
 ```
 
-## 3. PIP Usage
+## Section 3: PIP Usage
 <a id="section-3-pip"></a>
 Once the virtual environment is active, install packages using pip:
 
