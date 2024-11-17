@@ -2,16 +2,16 @@
 
 ## Table of Contents
 - [Section 1: Python](#1)
-  - [1.1 Installation](#1_1)
+  - [Section 1.1 Installation](#1_1)
 - [Section 2: Virtual Environment](#2)
-  - [2.1 Installation](#installation)
+  - [Section 2.1 Installation](#2)
 - [Section 3: PIP Usage](#3)
 - [Section 4: Docker Usage](#4)
-- [Section 5: Ollama on Open-WebUI](#5)
+- [Section 5: Open-WebUI on Ollama](#5)
 - [Section 6: Qdrant Database](#6)
 - [Section 7: Jupyter Notebook on Remote](#7)
 - - [Section 7.1: Automation by scripts](#7_1)
-- - [Section 7.2: Avoid Jupyter Notebook Token](#7_2)
+- - [Section 7.2: Avoid Notebook Token](#7_2)
 - [Section 8: Huggingface](#8)
   
 ## Section 1: Python Installation
@@ -72,7 +72,7 @@ source myenv/bin/activate
 
 Once activated, the virtual environment's name will appear in your terminal prompt.
 
-### Add custom ssl certificates
+### Add ssl certificates
 
 ```bash
 pip install certifi
@@ -82,7 +82,7 @@ python -c "import certifi; print(certifi.where())"
 openssl x509 -in $specific_ca.crt -text >> $virtualenv/lib/python2.7/site-packages/certifi/cacert.pem
 ```
 
-Sometimes when pip installation yields SSLError you need to use `--trusted-host`, like,
+Sometimes, when pip installation yields SSLError you need to use `--trusted-host`, like,
 
 ```
 python -m pip install --trusted-host github.com
@@ -103,10 +103,6 @@ rm -rf myenv
 Once the virtual environment is active, install packages using pip:
 
 ```
-pip install package_name
-```
-Example:
-```
 pip install transformers
 ```
 
@@ -124,7 +120,6 @@ pip install git+https://github.com/username/repo.git@commit_hash
 ### Install with a trustes host/certificate
 ```
 pip install package_name --cert path_to_cert.pem
-pip install package_name --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org
 pip install package_name --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org
 ```
 
@@ -177,7 +172,7 @@ sudo systemctl enable docker
 
 ``` sudo docker stop qdrant ```
 
-## Section 5: Ollama on Open-WebUI
+## Section 5: Open-WebUI on Ollama
 <a id="5"></a>
 
 ### Download info
@@ -203,7 +198,7 @@ Start open-webui in localhost (accessible from LAN)
 
 ```open-webui serve```
 
-### Ollama Installation
+### Ollama
 
 To install Ollama, run the following command:
 ```
@@ -260,25 +255,6 @@ client.create_collection(
 ```
 
 ```
-from qdrant_client.models import PointStruct
-
-operation_info = client.upsert(
-    collection_name="test_collection",
-    wait=True,
-    points=[
-        PointStruct(id=1, vector=[0.05, 0.61, 0.76, 0.74], payload={"city": "Berlin"}),
-        PointStruct(id=2, vector=[0.19, 0.81, 0.75, 0.11], payload={"city": "London"}),
-        PointStruct(id=3, vector=[0.36, 0.55, 0.47, 0.94], payload={"city": "Moscow"}),
-        PointStruct(id=4, vector=[0.18, 0.01, 0.85, 0.80], payload={"city": "New York"}),
-        PointStruct(id=5, vector=[0.24, 0.18, 0.22, 0.44], payload={"city": "Beijing"}),
-        PointStruct(id=6, vector=[0.35, 0.08, 0.11, 0.44], payload={"city": "Mumbai"}),
-    ],
-)
-
-print(operation_info)
-```
-
-```
 search_result = client.query_points(
     collection_name="test_collection",
     query=[0.2, 0.1, 0.9, 0.7],
@@ -292,7 +268,7 @@ print(search_result)
 ## Section 7: Jupyter Notebook on Remote Machine
 <a id="7"> </a>
 
-### Bining ports with remote server
+### Binding ports with remote server
 ```
 jupyter notebook --no-browser --port=8080 # in remote server
 ssh -L 8080:localhost:8080 user@remote_host # local_port:remote_host:remote_port # in local client
@@ -350,7 +326,62 @@ echo "All checks and startups completed."
 
 ```
 
-**Script for Local Machine (remote_connect.sh)**
+or by ports,
+
+```
+#!/bin/bash
+
+# Ensure logs directory exists
+LOG_DIR="$HOME/logs"
+mkdir -p "$LOG_DIR"
+
+# Function to check if a port is in use
+is_port_in_use() {
+    PORT=$1
+    if ss -ltn | grep -q ":$PORT "; then
+        return 0  # Port is in use
+    else
+        return 1  # Port is free
+    fi
+}
+
+# Check and start Jupyter Notebook
+if ! is_port_in_use 8888; then
+    echo "Starting Jupyter Notebook..."
+    nohup jupyter-notebook --no-browser --ip=0.0.0.0 --port=8888 > "$LOG_DIR/jupyter.log" 2>&1 &
+else
+    echo "Jupyter Notebook is already running on port 8888."
+fi
+
+# Check and start Ollama server
+if ! is_port_in_use 11434; then
+    echo "Starting Ollama server..."
+    nohup ollama serve > "$LOG_DIR/ollama.log" 2>&1 &
+else
+    echo "Ollama server is already running on port 11434."
+fi
+
+# Check and start Qdrant server
+if ! is_port_in_use 6333; then
+    echo "Starting Qdrant server..."
+    nohup qdrant > "$LOG_DIR/qdrant.log" 2>&1 &
+else
+    echo "Qdrant server is already running on port 6333."
+fi
+
+# Check and start Open-WebUI using Docker
+OPEN_WEBUI_CONTAINER="open-webui"
+if ! docker ps --filter "name=$OPEN_WEBUI_CONTAINER" --filter "status=running" | grep -q "$OPEN_WEBUI_CONTAINER"; then
+    echo "Starting Open-WebUI Docker container..."
+    docker run -d --name "$OPEN_WEBUI_CONTAINER" -p 3000:8080 ghcr.io/open-webui/open-webui:main >> "$LOG_DIR/open-webui.log" 2>&1
+else
+    echo "Open-WebUI Docker container is already running."
+fi
+
+echo "All checks and startups completed."
+```
+
+**Script for Local Machine (`remote_connect.sh`)**
 ```
 #!/bin/bash
 
@@ -388,7 +419,7 @@ chmod +x remote_setup.sh remote_connect.sh
 ```
 ./remote_connect.sh
 ```
-## Section 7.2: Avoid Jupyter Notebook Token
+## Section 7.2: Avoid Notebook Token
 <a id="7_2"> </a>
 
 ### Method: Disabling Token and Password Access (Secured via SSH)
