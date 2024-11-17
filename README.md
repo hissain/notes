@@ -2,8 +2,7 @@
 
 ## Table of Contents
 - [Section 1: Python](#section-1-python)
-  - [1.1 Installation](#installation)
-  - [1.2 Updating](#objectives)
+  - [1.1 Installation](#section-1-python-installation)
 - [Section 2: Virtual Environment](#section-2-venv)
   - [2.1 Installation](#installation)
 - [Section 3: PIP Usage](#section-3-pip)
@@ -28,6 +27,7 @@ sudo apt update
 ```
 
 ### Install Python:
+<a id="section-1-python-installation"></a>
 
 ```bash
 sudo apt install python3.11
@@ -187,7 +187,6 @@ Pull the Open WebUI Image
 ```
 docker pull ghcr.io/open-webui/open-webui:main
 ```
-Run the Container
 Run the container with default settings. This command includes a volume mapping to ensure persistent data storage.
 ```
 docker run -d -p 3000:8080 -v open-webui:/app/backend/data --name open-webui ghcr.io/open-webui/open-webui:main
@@ -221,7 +220,7 @@ OLLAMA_HOST=127.0.0.1:11434 ollama serve
 ## Section 6:Qdrant Vector DB
 <a id="section-6-qdrant"></a>
 
-### Setup:
+### Qdrant Setup:
 **Qdrant site:** https://qdrant.tech/documentation/quick-start/
 ```
 docker pull qdrant/qdrant
@@ -241,7 +240,7 @@ docker start qdrant
 docker rm -f qdrant
 ```
 
-### Python Client:
+### Qdrant on Python Client:
 
 ```
 from qdrant_client import QdrantClient
