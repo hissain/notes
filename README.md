@@ -274,14 +274,21 @@ jupyter notebook --no-browser --port=8080 # in remote server
 ssh -L 8080:localhost:8080 user@remote_host # local_port:remote_host:remote_port # in local client
 ```
 
-### Allow port in Firewall in remote server
+### Section 7.1: Automation by scripts
+<a id="7_1"> </a>
+
+***Allow port in Firewall in remote server***
 ```
 sudo ufw status
 sudo ufw allow 8181
 ```
 
-### Section 7.1: Automation by scripts
-<a id="7_1"> </a>
+**Port usage lookup/ killing**
+```
+sudo fuser -n tcp 8080 #status
+sudo lsof -i :11434 #status
+sudo lsof -k :11434 #kill
+```
 
 **Script for the Remote Server (`remote_setup.sh`)**
 ```
