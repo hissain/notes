@@ -302,55 +302,9 @@ sudo lsof -k :11434 #kill
 ```
 #!/bin/bash
 
-# Check and start Jupyter Notebook
-if ! pgrep -f "jupyter-notebook" > /dev/null; then
-    echo "Starting Jupyter Notebook..."
-    nohup jupyter-notebook --no-browser --ip=0.0.0.0 --port=8888 > jupyter.log 2>&1 &
-else
-    echo "Jupyter Notebook is already running."
-fi
-
-# Check and start Ollama server
-if ! pgrep -f "ollama" > /dev/null; then
-    echo "Starting Ollama server..."
-    nohup ollama serve > ollama.log 2>&1 &
-else
-    echo "Ollama server is already running."
-fi
-
-# Check and start Qdrant server
-if ! pgrep -f "qdrant" > /dev/null; then
-    echo "Starting Qdrant server..."
-    nohup qdrant > qdrant.log 2>&1 &
-else
-    echo "Qdrant server is already running."
-fi
-
-# Check and start Open-WebUI from a virtual environment
-VENV_PATH="$HOME/venv/openwebui"  # Change this path if needed
-if ! pgrep -f "webui.py" > /dev/null; then
-    echo "Starting Open-WebUI..."
-    source "$VENV_PATH/bin/activate"
-    nohup python "$VENV_PATH/openwebui/webui.py" > webui.log 2>&1 &
-    deactivate
-else
-    echo "Open-WebUI is already running."
-fi
-
-echo "All checks and startups completed."
-
-```
-
-or by ports,
-
-```
-#!/bin/bash
-
 # Ensure logs directory exists
 LOG_DIR="$HOME/logs"
 mkdir -p "$LOG_DIR"
-
-# Function to check if a port is in use
 is_port_in_use() {
     PORT=$1
     if ss -ltn | grep -q ":$PORT "; then
@@ -359,40 +313,43 @@ is_port_in_use() {
         return 1  # Port is free
     fi
 }
+kill_program_on_port() {
+    PORT=$1
+    # Find the process ID(s) using the specified port
+    PROCESS_IDS=$(sudo fuser -n tcp $PORT)
+
+    # Check if any process is found
+    if [ -z "$PROCESS_IDS" ]; then
+        echo "No process found running on port $PORT."
+    else
+        # Kill the process(es) identified by the process IDs
+        sudo kill -9  $PROCESS_IDS
+        echo "Killed process(es) running on port $PORT."
+    fi
+}
+
+kill_program_on_port 8181
+#kill_program_on_port 11434
+kill_program_on_port 8080
+
+sudo ufw allow 8181
+sudo ufw allow 11434
+sudo ufw allow 8080
 
 # Check and start Jupyter Notebook
-if ! is_port_in_use 8888; then
-    echo "Starting Jupyter Notebook..."
-    nohup jupyter-notebook --no-browser --ip=0.0.0.0 --port=8888 > "$LOG_DIR/jupyter.log" 2>&1 &
-else
-    echo "Jupyter Notebook is already running on port 8888."
-fi
+echo "Starting Jupyter Notebook..."
+nohup jupyter-notebook --no-browser --port=8181> "$LOG_DIR/jupyter.log" 2>&1 &
+echo "Jupyter Notebook is started in port 8181"
+PATH="/home/hissain/Python-3.11.10/venv/open-webui/bin:$PATH"
+source /home/hissain/Python-3.11.10/venv/open-webui/bin/activate > "$LOG_DIR/venv.log" 2>&1 &
+echo "Staring Ollama server"
+export OLLAMA_HOST="IP:11434"
+nohup ollama serve>"$LOG_DIR/ollama.log" 2>&1 &
+#echo "Staring qdrant server"
 
-# Check and start Ollama server
-if ! is_port_in_use 11434; then
-    echo "Starting Ollama server..."
-    nohup ollama serve > "$LOG_DIR/ollama.log" 2>&1 &
-else
-    echo "Ollama server is already running on port 11434."
-fi
-
-# Check and start Qdrant server
-if ! is_port_in_use 6333; then
-    echo "Starting Qdrant server..."
-    nohup qdrant > "$LOG_DIR/qdrant.log" 2>&1 &
-else
-    echo "Qdrant server is already running on port 6333."
-fi
-
-# Check and start Open-WebUI using Docker
-OPEN_WEBUI_CONTAINER="open-webui"
-if ! docker ps --filter "name=$OPEN_WEBUI_CONTAINER" --filter "status=running" | grep -q "$OPEN_WEBUI_CONTAINER"; then
-    echo "Starting Open-WebUI Docker container..."
-    docker run -d --name "$OPEN_WEBUI_CONTAINER" -p 3000:8080 ghcr.io/open-webui/open-webui:main >> "$LOG_DIR/open-webui.log" 2>&1
-else
-    echo "Open-WebUI Docker container is already running."
-fi
-
+echo "Staring open-webui server"
+nohup open-webui serve > "$LOG_DIR/open-webui.log" 2>&1 &
+#nohup deactivate
 echo "All checks and startups completed."
 ```
 
@@ -404,8 +361,8 @@ echo "All checks and startups completed."
 REMOTE_USER="your_username"
 REMOTE_HOST="remote.server.ip"
 REMOTE_PORT=22  # Default SSH port
-JUPYTER_REMOTE_PORT=8888  # Adjust if your Jupyter runs on a different port
-JUPYTER_LOCAL_PORT=8888  # Port to map locally
+JUPYTER_REMOTE_PORT=8181  # Adjust if your Jupyter runs on a different port
+JUPYTER_LOCAL_PORT=8181  # Port to map locally
 
 # Run the setup script on the remote server
 ssh -p $REMOTE_PORT $REMOTE_USER@$REMOTE_HOST "bash -s" < remote_setup.sh
