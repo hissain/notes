@@ -205,9 +205,17 @@ To install Ollama, run the following command:
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 
+Stop and kill ollama service
+```
+pgrep ollama
+pkill ollama
+systemctl stop ollama.service
+```
+
 Start ollama server
 ```
 ollama serve
+OLLAMA_HOST=IP:11434 ollama serve
 ```
 
 Start ollama server in local PC (accessible from LAN)
