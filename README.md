@@ -80,6 +80,7 @@ python -c "import certifi; print(certifi.where())"
 ```
 ```
 openssl x509 -in $specific_ca.crt -text >> $virtualenv/lib/python2.7/site-packages/certifi/cacert.pem
+sudo update-ca-certificates
 ```
 
 Sometimes, when pip installation yields SSLError you need to use `--trusted-host`, like,
