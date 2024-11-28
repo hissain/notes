@@ -13,6 +13,7 @@
 - - [Section 7.1: Automation by scripts](#7_1)
 - - [Section 7.2: Avoid Notebook Token](#7_2)
 - [Section 8: Huggingface](#8)
+- [Section 9: GPU Inspection](#9)
   
 ## Section 1: Python Installation
 <a id="1"></a>
@@ -445,3 +446,13 @@ huggingface-cli download meta-llama/Meta-Llama-3.1-8B-Instruct --local-dir ./Met
 ```
 pip install git+https://github.com/huggingface/transformers
 ```
+
+## Section 9: GPU Inspection 
+<a id=9> </a>
+
+### Continuous nvdia-smi inspection
+```
+watch -n 1 nvidia-smi
+```
+
+### 
