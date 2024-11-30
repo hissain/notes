@@ -100,6 +100,15 @@ deactivate
 rm -rf myenv
 ```
 
+## Creating new virtual env from old
+
+This assures previous packages are included,
+
+```bash
+cp -rL ~/myenv/ ./my_newenv #OR
+cp -RL ~/myenv/ ./my_newenv
+```
+
 ## Section 3: PIP Usage
 <a id="3"></a>
 Once the virtual environment is active, install packages using pip:
