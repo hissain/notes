@@ -62,7 +62,8 @@ sudo update-alternatives --config python3
 
 To create a virtual environment with a specific version of Python, use the following command:
 ```
-python3.10 -m venv myenv
+sudo apt install python3.11-venv python3.11-dev build-essential
+python3.11 -m venv myenv
 ```
 
 ### Activating the Virtual Environment
