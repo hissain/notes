@@ -1,4 +1,4 @@
-### Check GPU Memory ###
+### 1. Check GPU Memory ###
 ``` python
 import torch
 
@@ -17,4 +17,43 @@ if torch.cuda.is_available():
         print()
 else:
     print("No GPU available.")
+```
+
+### 2. Multiple GPU Accessibility ###
+
+#### Allow GPU Access to All Users:
+By default, GPU access is granted to users in the video group. Add all relevant users to this group:
+
+```bash
+sudo usermod -aG video <username>
+```
+
+Verify the user is added:
+
+```bash
+groups <username>
+```
+
+#### Configure Environment Variables:
+Set up the environment for all users via a global configuration:
+
+Add the following to /etc/environment or a similar system-wide configuration file:
+
+```bash
+CUDA_VISIBLE_DEVICES=0,1
+PATH=$PATH:/usr/local/cuda/bin
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64
+```
+
+Reload the environment variables:
+
+```bash
+source /etc/environment
+```
+
+#### Ensure that SSH sessions can access GPUs:
+Set up the CUDA_VISIBLE_DEVICES variable for users automatically: Add the following to /etc/profile:
+
+```bash
+export CUDA_VISIBLE_DEVICES=0,1
 ```
