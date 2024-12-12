@@ -14,6 +14,7 @@
 - - [Section 7.2: Avoid Notebook Token](#7_2)
 - [Section 8: Huggingface](#8)
 - [Section 9: GPU Inspection](#9)
+- [Section 10: Formatting & Beutification](#10)
   
 ## Section 1: Python Installation
 <a id="1"></a>
@@ -466,3 +467,17 @@ watch -n 1 nvidia-smi
 ```
 
 ### 
+
+## Section 10: Formatting and Beautification
+<a id="10"> </a>
+
+```
+from rerankers import Reranker
+from rich.console import Console
+from rich.table import Table
+
+def pretty_print(item):
+  console = Console()
+  with console.pager(styles=True):
+    console.print(item)
+```
