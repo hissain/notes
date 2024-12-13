@@ -494,16 +494,33 @@ Try this. Basic steps are to:
 6/ save
 
 ```
-base_model = AutoModelForCausalLM.from_pretrained(“base_model”, load_in_8bit=True, torch_dtype=torch.float16, device_map=“auto”)
-base_model = prepare_model_for_int8_training(base_model)
-peft_model = get_peft_model(base_model, peft_config)
-training_args = TrainingArguments()
-trainer = Trainer()
-trainer.train()
-peft_model.save_pretrained(lora_adapter, save_adapter=True, save_config=True)
-model_to_merge = PeftModel.from_pretrained(AutoModelForCausalLM.from_pretrained(base_model).to(“cuda”), lora_adapter)
-merged_model = model_to_merge.merge_and_unload()
-merged_model.save_pretrained(merged_model)
+import torch
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    BitsAndBytesConfig,
+    pipeline,
+    logging,
+)
+from peft import LoraConfig, PeftModel, get_peft_model, prepare_model_for_kbit_training
+
+base_model_id = "./base/models/Meta-Llama-3.1-8B-Instruct"
+new_model = "./lora/models/Meta-llama3-8b-SFT"
+
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_use_double_quant=True,
+)
+
+model = AutoModelForCausalLM.from_pretrained(base_model_id, quantization_config=bnb_config, device_map="auto")
+tokenizer = AutoTokenizer.from_pretrained(base_model_id)
+peft_config = LoraConfig(task_type="CAUSAL_LM", r=2, lora_alpha=16, lora_dropout=0.01)
+adapter_model = PeftModel.from_pretrained(model, new_model)
+merged_model = adapter_model.merge_and_unload()
+
+merged_model.save_pretrained('./merged/models/Meta-llama3-8b-SFT-merged')
+tokenizer.save_pretrained('./merged//models/Meta-llama3-8b-SFT-merged')
 ```
 
 ## Section 9: GPU Inspection 
