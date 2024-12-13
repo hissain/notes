@@ -15,6 +15,7 @@
 - [Section 8: Huggingface](#8)
 - [Section 9: GPU Inspection](#9)
 - [Section 10: Formatting & Beutification](#10)
+- [Section 11: Langchain with Ollama](#11)
   
 ## Section 1: Python Installation
 <a id="1"></a>
@@ -480,4 +481,41 @@ def pretty_print(item):
   console = Console()
   with console.pager(styles=True):
     console.print(item)
+```
+
+## Section 11: Langchain with Ollama
+<a id="11"> </a>
+
+```
+from langchain_ollama import OllamaLLM
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
+
+llm = OllamaLLM(base_url='http://localhost:11434', model="llama3.2:latest")
+
+template = """
+context: {context}
+question: {question}
+answer:
+"""
+prompt = ChatPromptTemplate.from_template(template)
+
+# Create the chain
+qa_chain = (
+    {
+        "context": RunnablePassthrough(),
+        "question": RunnablePassthrough(),
+    }
+    | prompt
+    | llm
+    | StrOutputParser()
+)
+
+context = "I am Hissain, an AI enthusiast."
+question = "Who is Hissain?"
+
+result = qa_chain.invoke({"context": context, "question": question})
+print(result)
+
 ```
