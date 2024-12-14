@@ -523,6 +523,28 @@ merged_model.save_pretrained('./merged/models/Meta-llama3-8b-SFT-merged')
 tokenizer.save_pretrained('./merged//models/Meta-llama3-8b-SFT-merged')
 ```
 
+### Create Quantized Model on Ollama
+Download a model
+```
+hfdownloader -m NousResearch/Hermes-2-Theta-Llama-3-8B
+```
+
+Create model
+```
+ollama create -f Modelfile NousResearch-Hermes-2-Theta-Llama-3-8B
+```
+
+Create quantized model
+```
+ollama create -f Modelfile NousResearch-Hermes-2-Theta-Llama-3-8B:q4_0 --quantize q4_0
+```
+
+Run model
+```
+ollama run --verbose NousResearch-Hermes-2-Theta-Llama-3-8B:q4_0 \
+  What would happen in a fight between a lion and a unicorn
+```
+
 ## Section 9: GPU Inspection 
 <a id=9> </a>
 
