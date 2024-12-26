@@ -57,3 +57,28 @@ Set up the CUDA_VISIBLE_DEVICES variable for users automatically: Add the follow
 ```bash
 export CUDA_VISIBLE_DEVICES=0,1
 ```
+
+
+### 3. Show Model List ###
+
+#### OpenAI:
+
+```
+from openai import OpenAI
+import os
+client = OpenAI(
+    api_.key = os.getenv('OPENAI_API_KEY')
+)
+models = client.models.list()
+for model in models:
+    print(model.id)
+```
+
+#### Gemini
+
+```
+import google.generativeai as genai
+for m in genai.list_models():
+    if 'generateContent' in m.supported_generation_methods:
+        print(m.name)
+```
