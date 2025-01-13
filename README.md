@@ -21,6 +21,14 @@
 <a id="1"></a>
 As an example, install Python 3.11 on Ubuntu from the command line, follow these steps:
 
+### Add ssl cert
+
+```bash
+sudo apt-get install -y ca-certificates
+sudo cp local-ca.crt /usr/local/share/ca-certificates
+sudo update-ca-certificates
+```
+
 ### Update the system packages:
 
 ```bash
