@@ -174,10 +174,10 @@ Download docker-desktop and install with,
 ``` sudo apt-get install ./docker-desktop-amd64.deb ```
 
 ### Installation of Docker
-``` sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
-sudo systemctl start docker
-sudo systemctl enable docker
+Try to install following the official link,
+
+```bash
+https://docs.docker.com/engine/install/ubuntu/
 ```
 
 ### Working with Docker/ Docker-Desktop
