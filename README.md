@@ -91,7 +91,7 @@ pip install certifi
 python -c "import certifi; print(certifi.where())"
 ```
 ```
-openssl x509 -in $specific_ca.crt -text >> $virtualenv/lib/python2.7/site-packages/certifi/cacert.pem
+openssl x509 -in $your_ca.crt -text >> $(python -c "import certifi; print(certifi.where())")
 sudo update-ca-certificates
 ```
 
