@@ -101,6 +101,11 @@ Sometimes, when pip installation yields SSLError you need to use `--trusted-host
 python -m pip install --trusted-host github.com
 ```
 
+Sometimes, you need to set global cert fro pip
+```
+pip config set global.cert
+```
+
 ## Deactivating/Deleting a Virtual Environment
 To remove a virtual environment, deactivate it and delete the directory:
 
