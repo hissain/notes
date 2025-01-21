@@ -103,7 +103,7 @@ python -m pip install --trusted-host github.com
 
 Sometimes, you need to set global cert fro pip
 ```
-pip config set global.cert
+pip config set global.cert yourcert.crt
 ```
 
 ## Deactivating/Deleting a Virtual Environment
