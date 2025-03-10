@@ -232,6 +232,22 @@ To install Ollama, run the following command:
 curl -fsSL https://ollama.com/install.sh | sh
 ```
 
+To make ollama publicly accessible by IP
+```
+sudo systemctl edit ollama.service
+```
+Then add following line:
+```
+[Service]
+Environment="OLLAMA_HOST=0.0.0.0:11434"
+
+```
+Save and reload the daemon using
+```
+sudo systemctl daemon-reload 
+sudo systemctl restart ollama
+```
+
 Stop and kill ollama service
 ```
 pgrep ollama
