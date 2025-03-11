@@ -88,10 +88,17 @@ Once activated, the virtual environment's name will appear in your terminal prom
 
 ```bash
 pip install certifi
+```
+
+```bash
 python -c "import certifi; print(certifi.where())"
 ```
+
 ```
 openssl x509 -in $your_ca.crt -text >> $(python -c "import certifi; print(certifi.where())")
+```
+
+```bash
 sudo update-ca-certificates
 ```
 
