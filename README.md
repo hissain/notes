@@ -641,3 +641,11 @@ result = qa_chain.invoke({"context": context, "question": question})
 print(result)
 
 ```
+
+
+### Installing pyarrow in python 3.11
+
+```
+pip install --extra-index-url https://pypi.fury.io/arrow-nightlies/ \
+        --prefer-binary --pre pyarrow
+```
