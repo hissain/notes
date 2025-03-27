@@ -490,6 +490,11 @@ huggingface-cli login # use your HF token
 # Download the HuggingFace model to local folder "./Meta-Llama-3.1-8B-Instruct"  
 huggingface-cli download meta-llama/Meta-Llama-3.1-8B-Instruct --local-dir ./Meta-Llama-3.1-8B-Instruct
 ```
+
+**Sometimes, model downloading may fail due to SSL error:**
+
+Following this solution https://stackoverflow.com/a/77583757/1084174 might be helpful.
+
 ### Installing latest package
 ```
 pip install git+https://github.com/huggingface/transformers
