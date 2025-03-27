@@ -113,6 +113,14 @@ Sometimes, you need to set global cert fro pip
 pip config set global.cert yourcert.crt
 ```
 
+Sometimes, following code works from python:
+
+```
+import ssl
+import certifi
+ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
+```
+
 ## Deactivating/Deleting a Virtual Environment
 To remove a virtual environment, deactivate it and delete the directory:
 
