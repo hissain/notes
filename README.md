@@ -16,6 +16,7 @@
 - [Section 9: GPU Inspection](#9)
 - [Section 10: Formatting & Beutification](#10)
 - [Section 11: Langchain with Ollama](#11)
+- [Section 12: Package Dependency Resolution](#12)
   
 ## Section 1: Python Installation
 <a id="1"></a>
@@ -655,6 +656,9 @@ print(result)
 
 ```
 
+
+## Section 12: Package Dependency Resolution
+<a id="12"> </a>
 
 ### Installing pyarrow in python 3.11
 
