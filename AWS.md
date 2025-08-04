@@ -56,8 +56,16 @@ sudo systemctl enable hotflash
 
 #### 5. **Start the service now**
 
+Start
+
 ```bash
 sudo systemctl start hotflash
+```
+
+or restart
+
+```bash
+sudo systemctl restart hotflash
 ```
 
 ---
