@@ -1,4 +1,4 @@
-Lets say my service name is hotflash.
+Lets say my service name is project.
 
 ---
 
@@ -7,24 +7,24 @@ Lets say my service name is hotflash.
 #### 1. **Create a systemd service file**
 
 ```bash
-sudo nano /etc/systemd/system/hotflash.service
+sudo nano /etc/systemd/system/project.service
 ```
 
 #### 2. **Paste the following (edit paths if needed)**
 
 ```ini
 [Unit]
-Description=Hotflash Remote Control Panel
+Description=project Remote Control Panel
 After=network.target
 
 [Service]
 User=ec2-user
-WorkingDirectory=/home/ec2-user/hotflash
+WorkingDirectory=/home/ec2-user/project
 ExecStart=/usr/bin/python3 server.py
 Restart=always
 RestartSec=5
-StandardOutput=file:/home/ec2-user/hotflash/server.log
-StandardError=file:/home/ec2-user/hotflash/server.err
+StandardOutput=file:/home/ec2-user/project/server.log
+StandardError=file:/home/ec2-user/project/server.err
 
 [Install]
 WantedBy=multi-user.target
@@ -33,7 +33,7 @@ WantedBy=multi-user.target
 > ✅ Ensure:
 >
 > * `/usr/bin/python3` is the correct Python path (`which python3`)
-> * Replace `/home/ec2-user/hotflash` with your actual project path
+> * Replace `/home/ec2-user/project` with your actual project path
 
 ---
 
@@ -49,7 +49,7 @@ sudo systemctl daemon-reload
 #### 4. **Enable the service (auto-start on boot)**
 
 ```bash
-sudo systemctl enable hotflash
+sudo systemctl enable project
 ```
 
 ---
@@ -59,13 +59,13 @@ sudo systemctl enable hotflash
 Start
 
 ```bash
-sudo systemctl start hotflash
+sudo systemctl start project
 ```
 
 or restart
 
 ```bash
-sudo systemctl restart hotflash
+sudo systemctl restart project
 ```
 
 ---
@@ -73,7 +73,7 @@ sudo systemctl restart hotflash
 #### 6. **Check status**
 
 ```bash
-sudo systemctl status hotflash
+sudo systemctl status project
 ```
 
 You should see: `Active: active (running)`
@@ -83,13 +83,13 @@ You should see: `Active: active (running)`
 #### 7. **View logs**
 
 ```bash
-tail -f /home/ec2-user/hotflash/server.log
+tail -f /home/ec2-user/project/server.log
 ```
 
 or
 
 ```bash
-journalctl -u hotflash -f
+journalctl -u project -f
 ```
 
 ---
